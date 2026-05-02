@@ -1,0 +1,4 @@
+---
+- import_playbook: mysql.yml
+- import_playbook: wordpress.yml
+- import_playbook: nginx.yml

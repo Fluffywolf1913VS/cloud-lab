@@ -1,0 +1,86 @@
+---
+- name: WordPress - Remove Apache to avoid Nginx conflict
+  ansible.builtin.apt:
+    name: apache2
+    state: absent
+
+- name: WordPress - Install MySQL, PHP, Nginx and dependencies
+  ansible.builtin.apt:
+    name:
+      - mysql-server
+      - python3-pymysql
+      - nginx
+      - php
+      - php-fpm
+      - php-curl
+      - php-mysql
+      - php-gd
+      - php-mbstring
+      - php-xml
+      - php-imagick
+      - php-zip
+      - php-xmlrpc
+      - curl
+      - tar
+    update_cache: yes
+    cache_valid_time: 86400
+    state: present
+
+- name: MySQL - Start service
+  ansible.builtin.service:
+    name: mysql
+    state: started
+    enabled: yes
+
+- name: MySQL - Create WordPress database and user
+  ansible.builtin.shell: |
+    mysql --protocol=socket -uroot <<SQL
+    CREATE DATABASE IF NOT EXISTS {{ wp_db_name }} CHARACTER SET {{ wp_db_charset }};
+    CREATE USER IF NOT EXISTS '{{ wp_db_user }}'@'localhost' IDENTIFIED BY '{{ wp_db_password }}';
+    ALTER USER '{{ wp_db_user }}'@'localhost' IDENTIFIED BY '{{ wp_db_password }}';
+    GRANT ALL PRIVILEGES ON {{ wp_db_name }}.* TO '{{ wp_db_user }}'@'localhost';
+    FLUSH PRIVILEGES;
+    SQL
+  changed_when: false
+
+- name: WordPress - Remove default index.html
+  ansible.builtin.file:
+    path: /var/www/html/index.html
+    state: absent
+  when: wp_install_dir == "/var/www/html"
+
+- name: WordPress - Remove default Nginx page
+  ansible.builtin.file:
+    path: /var/www/html/index.nginx-debian.html
+    state: absent
+  when: wp_install_dir == "/var/www/html"
+
+- name: WordPress - Create install directory
+  ansible.builtin.file:
+    path: "{{ wp_install_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: WordPress - Extract archive
+  ansible.builtin.unarchive:
+    src: "https://wordpress.org/{{ wp_version }}.tar.gz"
+    dest: "{{ wp_install_dir }}"
+    remote_src: yes
+    creates: "{{ wp_install_dir }}/wordpress/wp-settings.php"
+
+- name: WordPress - Copy wp-config.php
+  ansible.builtin.template:
+    src: wp-config.php.j2
+    dest: "{{ wp_install_dir }}/wordpress/wp-config.php"
+
+- name: WordPress - Change installation ownership
+  ansible.builtin.file:
+    path: "{{ wp_install_dir }}/wordpress"
+    owner: www-data
+    group: www-data
+    state: directory
+    recurse: yes
+
+- name: WordPress - Configure Nginx
+  ansible.builtin.include_tasks: nginx.yml
+  when: wp_webserver == "nginx"

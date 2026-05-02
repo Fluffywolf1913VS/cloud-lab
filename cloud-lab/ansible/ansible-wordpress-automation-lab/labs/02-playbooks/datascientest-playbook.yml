@@ -1,0 +1,45 @@
+---
+- name: Install Apache and copy files to the web server group
+  hosts: serveurweb
+  become: yes
+
+  tasks:
+    - name: Remove Nginx if present to avoid port 80 conflict
+      ansible.builtin.apt:
+        name: nginx
+        state: absent
+
+    - name: Install Apache2
+      ansible.builtin.apt:
+        name: apache2
+        state: present
+        update_cache: yes
+
+    - name: Start and enable Apache2
+      ansible.builtin.service:
+        name: apache2
+        state: started
+        enabled: yes
+
+    - name: Copy index.html
+      ansible.builtin.copy:
+        src: index.html
+        dest: /var/www/html/index.html
+        mode: "0644"
+
+- name: Install PostgreSQL and enable service
+  hosts: serveurdatabase
+  become: yes
+
+  tasks:
+    - name: Install PostgreSQL
+      ansible.builtin.apt:
+        name: postgresql
+        state: latest
+        update_cache: yes
+
+    - name: Start and enable PostgreSQL
+      ansible.builtin.service:
+        name: postgresql
+        state: started
+        enabled: yes

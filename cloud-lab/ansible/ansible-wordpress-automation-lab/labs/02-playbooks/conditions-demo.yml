@@ -1,0 +1,23 @@
+---
+- name: Demonstrate conditions with when
+  hosts: all
+  become: yes
+  gather_facts: yes
+
+  tasks:
+    - name: Show OS facts
+      ansible.builtin.debug:
+        msg: "Host: {{ inventory_hostname }} | OS family: {{ ansible_facts['os_family'] }} | Distribution: {{ ansible_facts['distribution'] }}"
+
+    - name: Install tree on Debian or Ubuntu
+      ansible.builtin.apt:
+        name: tree
+        state: present
+        update_cache: yes
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Install tree on RedHat or CentOS
+      ansible.builtin.yum:
+        name: tree
+        state: present
+      when: ansible_facts['os_family'] == "RedHat"

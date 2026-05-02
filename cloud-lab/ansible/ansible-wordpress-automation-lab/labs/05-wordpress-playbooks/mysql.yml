@@ -1,0 +1,43 @@
+---
+- name: Install MySQL and PHP for WordPress
+  hosts: production
+  become: true
+
+  tasks:
+    - name: Install MySQL, PHP and dependencies
+      ansible.builtin.apt:
+        name:
+          - mysql-server
+          - python3-pymysql
+          - php
+          - php-fpm
+          - php-curl
+          - php-mysql
+          - php-gd
+          - php-mbstring
+          - php-xml
+          - php-imagick
+          - php-zip
+          - php-xmlrpc
+          - curl
+          - tar
+        update_cache: yes
+        cache_valid_time: 86400
+        state: present
+
+    - name: Start and enable MySQL
+      ansible.builtin.service:
+        name: mysql
+        state: started
+        enabled: yes
+
+    - name: Create WordPress database and user
+      ansible.builtin.shell: |
+        mysql --protocol=socket -uroot <<SQL
+        CREATE DATABASE IF NOT EXISTS {{ wp_db_name }} CHARACTER SET {{ wp_db_charset }};
+        CREATE USER IF NOT EXISTS '{{ wp_db_user }}'@'localhost' IDENTIFIED BY '{{ wp_db_password }}';
+        ALTER USER '{{ wp_db_user }}'@'localhost' IDENTIFIED BY '{{ wp_db_password }}';
+        GRANT ALL PRIVILEGES ON {{ wp_db_name }}.* TO '{{ wp_db_user }}'@'localhost';
+        FLUSH PRIVILEGES;
+        SQL
+      changed_when: false

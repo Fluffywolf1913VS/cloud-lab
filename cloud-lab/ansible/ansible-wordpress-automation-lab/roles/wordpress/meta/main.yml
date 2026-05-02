@@ -1,0 +1,18 @@
+galaxy_info:
+  author: Laurent Mandine
+  description: Deploy WordPress with Nginx, MySQL and PHP-FPM
+  company: Portfolio Project
+  license: MIT
+  min_ansible_version: "2.14"
+  platforms:
+    - name: Ubuntu
+      versions:
+        - all
+  galaxy_tags:
+    - wordpress
+    - nginx
+    - mysql
+    - php
+    - automation
+
+dependencies: []

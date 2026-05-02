@@ -1,0 +1,34 @@
+---
+- name: Demonstrate Ansible variables
+  hosts: all
+  gather_facts: yes
+
+  vars:
+    formation: "Datascientest Ansible"
+    message_default: "Message defined in the playbook"
+
+  tasks:
+    - name: Show inventory hostname and tier
+      ansible.builtin.debug:
+        msg: "Host: {{ inventory_hostname }} | Tier: {{ tier | default('n/a') }}"
+
+    - name: Show operating system
+      ansible.builtin.debug:
+        msg: "Distribution: {{ ansible_facts['distribution'] }} | OS family: {{ ansible_facts['os_family'] }}"
+
+    - name: Show playbook variable
+      ansible.builtin.debug:
+        msg: "Formation: {{ formation }}"
+
+    - name: Show variable that can be overridden with -e
+      ansible.builtin.debug:
+        msg: "{{ message_default }}"
+
+    - name: Run hostname and register result
+      ansible.builtin.command:
+        cmd: hostname
+      register: hostname_result
+
+    - name: Show registered result
+      ansible.builtin.debug:
+        msg: "hostname returned: {{ hostname_result.stdout }}"

@@ -1,0 +1,7 @@
+---
+- name: Deploy WordPress with an Ansible role
+  hosts: production
+  become: true
+
+  roles:
+    - wordpress

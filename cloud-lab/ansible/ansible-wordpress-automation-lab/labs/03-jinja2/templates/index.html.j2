@@ -1,0 +1,7 @@
+<html>
+<body>
+  <h1>Message from {{ inventory_hostname }}</h1>
+  <p>{{ web_message }}</p>
+  <p>Tier: {{ tier | default('unknown') }}</p>
+</body>
+</html>

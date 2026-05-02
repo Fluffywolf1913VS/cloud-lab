@@ -1,0 +1,26 @@
+<?php
+define('DB_NAME', '{{ wp_db_name }}');
+define('DB_USER', '{{ wp_db_user }}');
+define('DB_PASSWORD', '{{ wp_db_password }}');
+define('DB_HOST', '{{ wp_db_host }}');
+define('DB_CHARSET', '{{ wp_db_charset }}');
+define('DB_COLLATE', '{{ wp_db_collate }}');
+
+define('AUTH_KEY',         'demo-auth-key');
+define('SECURE_AUTH_KEY',  'demo-secure-auth-key');
+define('LOGGED_IN_KEY',    'demo-logged-in-key');
+define('NONCE_KEY',        'demo-nonce-key');
+define('AUTH_SALT',        'demo-auth-salt');
+define('SECURE_AUTH_SALT', 'demo-secure-auth-salt');
+define('LOGGED_IN_SALT',   'demo-logged-in-salt');
+define('NONCE_SALT',       'demo-nonce-salt');
+
+$table_prefix = '{{ wp_table_prefix }}';
+
+define('WP_DEBUG', {{ wp_debug | lower }});
+
+if ( ! defined('ABSPATH') ) {
+    define('ABSPATH', __DIR__ . '/');
+}
+
+require_once ABSPATH . 'wp-settings.php';

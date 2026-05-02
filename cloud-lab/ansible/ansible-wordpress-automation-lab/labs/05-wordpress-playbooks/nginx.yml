@@ -1,0 +1,43 @@
+---
+- name: Install and configure Nginx for WordPress
+  hosts: production
+  become: true
+
+  tasks:
+    - name: Install Nginx
+      ansible.builtin.apt:
+        name: nginx
+        update_cache: yes
+        cache_valid_time: 86400
+        state: present
+      when: wp_webserver == "nginx"
+
+    - name: Determine PHP-FPM version
+      ansible.builtin.shell: "dpkg -l | grep php-fpm | awk '{print $3}' | grep -o '[0-9]\\.[0-9]' | head -n 1"
+      register: php_ver
+      changed_when: false
+
+    - name: Remove default Nginx site
+      ansible.builtin.file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+
+    - name: Copy WordPress Nginx virtual host
+      ansible.builtin.template:
+        src: templates/nginx-vhost.j2
+        dest: /etc/nginx/conf.d/wordpress.conf
+        owner: root
+        group: root
+        mode: "0644"
+
+    - name: Start PHP-FPM
+      ansible.builtin.service:
+        name: "php{{ php_ver.stdout }}-fpm"
+        state: started
+        enabled: yes
+
+    - name: Restart Nginx
+      ansible.builtin.service:
+        name: nginx
+        state: restarted
+        enabled: yes

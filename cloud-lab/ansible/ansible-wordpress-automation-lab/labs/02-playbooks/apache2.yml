@@ -1,0 +1,24 @@
+---
+- name: Install and start Apache with Jinja2
+  hosts: serveurweb
+  become: yes
+
+  vars:
+    web_message: "Datascientest Ansible - page generated with Jinja2."
+
+  tasks:
+    - name: Install Apache2
+      ansible.builtin.apt:
+        name: apache2
+        state: present
+
+    - name: Start Apache2
+      ansible.builtin.service:
+        name: apache2
+        state: started
+        enabled: yes
+
+    - name: Create index.html using Jinja2
+      ansible.builtin.template:
+        src: ../03-jinja2/templates/index.html.j2
+        dest: /var/www/html/index.html

@@ -1,0 +1,24 @@
+---
+- name: Demonstrate loops
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Create multiple files in /tmp
+      ansible.builtin.file:
+        state: touch
+        path: "/tmp/{{ item }}"
+      loop:
+        - file1
+        - file2
+        - file3
+
+    - name: Create files with different permissions
+      ansible.builtin.file:
+        state: touch
+        path: "/tmp/{{ item.name }}"
+        mode: "{{ item.mode }}"
+      loop:
+        - { name: "datascientest1.txt", mode: "0755" }
+        - { name: "datascientest2.txt", mode: "0775" }
+        - { name: "datascientest3.txt", mode: "0777" }

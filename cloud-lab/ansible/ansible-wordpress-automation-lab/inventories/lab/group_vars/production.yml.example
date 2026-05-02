@@ -1,0 +1,14 @@
+# Example values only. Use Ansible Vault for real secrets.
+wp_webserver: nginx
+wp_version: latest
+wp_install_dir: /var/www/html
+wp_sitename: wordpress.local
+
+wp_db_name: wordpress_role_db
+wp_db_user: wordpress_role_user
+wp_db_password: CHANGE_ME_USE_ANSIBLE_VAULT
+wp_db_host: localhost
+wp_db_charset: utf8
+wp_db_collate: ""
+wp_table_prefix: "datascientest_"
+wp_debug: false

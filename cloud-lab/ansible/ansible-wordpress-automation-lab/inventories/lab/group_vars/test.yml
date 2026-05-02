@@ -1,0 +1,3 @@
+env: test
+page_title: "Environment TEST"
+page_message: "Page generated for testing."

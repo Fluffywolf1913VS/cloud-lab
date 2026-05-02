@@ -1,0 +1,41 @@
+---
+- name: Install WordPress
+  hosts: production
+  become: true
+
+  tasks:
+    - name: Remove default index.html
+      ansible.builtin.file:
+        path: /var/www/html/index.html
+        state: absent
+
+    - name: Remove default nginx page
+      ansible.builtin.file:
+        path: /var/www/html/index.nginx-debian.html
+        state: absent
+
+    - name: Create install directory
+      ansible.builtin.file:
+        path: "{{ wp_install_dir }}"
+        state: directory
+        mode: "0755"
+
+    - name: Download and extract WordPress
+      ansible.builtin.unarchive:
+        src: "https://wordpress.org/{{ wp_version }}.tar.gz"
+        dest: "{{ wp_install_dir }}"
+        remote_src: yes
+        creates: "{{ wp_install_dir }}/wordpress/wp-settings.php"
+
+    - name: Copy wp-config.php
+      ansible.builtin.template:
+        src: templates/wp-config.php.j2
+        dest: "{{ wp_install_dir }}/wordpress/wp-config.php"
+
+    - name: Change WordPress ownership
+      ansible.builtin.file:
+        path: "{{ wp_install_dir }}/wordpress"
+        owner: www-data
+        group: www-data
+        state: directory
+        recurse: yes

@@ -1,0 +1,7 @@
+---
+- name: Deploy Nginx with a reusable role
+  hosts: datascientest_app
+  become: yes
+
+  roles:
+    - nginx_web

@@ -1,0 +1,31 @@
+all:
+  children:
+    datascientest_app:
+      children:
+        dev:
+          hosts:
+            client-dev:
+              ansible_host: 172.31.5.71
+        test:
+          hosts:
+            client-test:
+              ansible_host: 172.31.5.136
+        prod:
+          hosts:
+            client-prod:
+              ansible_host: 172.31.7.113
+
+    serveurweb:
+      hosts:
+        serveurweb1.datascientest.fr:
+          ansible_host: 172.31.5.71
+
+    serveurdatabase:
+      hosts:
+        serveurdatabase1.datascientest.fr:
+          ansible_host: 172.31.7.113
+
+    production:
+      hosts:
+        wordpress1.datascientest.fr:
+          ansible_host: 172.31.5.136
