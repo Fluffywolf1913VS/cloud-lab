@@ -2,6 +2,20 @@
 
 ![Cloud Infrastructure Lab](assets/cloud-lab-banner.png)
 
+![AWS](https://img.shields.io/badge/AWS-orange)
+![Security](https://img.shields.io/badge/Security-red)
+![Cloud](https://img.shields.io/badge/Cloud-blue)
+![DevOps](https://img.shields.io/badge/DevOps-blueviolet)
+![Ansible](https://img.shields.io/badge/Ansible-black)
+![Proxmox](https://img.shields.io/badge/Proxmox-E57000)
+![VPC](https://img.shields.io/badge/VPC-Networking-1F6FEB)
+![IAM](https://img.shields.io/badge/IAM-Access_Control-555)
+![EC2](https://img.shields.io/badge/EC2-Compute-FF9900)
+![S3](https://img.shields.io/badge/S3-Storage-569A31)
+![RDS](https://img.shields.io/badge/RDS-Database-527FFF)
+![Cloud Quest](https://img.shields.io/badge/Cloud_Quest-AWS-FF9900)
+![Portfolio](https://img.shields.io/badge/Portfolio-Active-0A66C2)
+
 *Cloud Lab banner — this repository documents my progression from cloud fundamentals to AWS architecture, infrastructure automation, security, and DevOps.*
 
 > **Hands-on Cloud Engineering Portfolio**  
